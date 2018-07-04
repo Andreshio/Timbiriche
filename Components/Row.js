@@ -12,24 +12,25 @@ const CreateCol  = ({cols}) => (
   </View>
 )
 
-export default ({vert, horz, isLastRow, onPress}) => {
+export default ({tiles, vert, horz, isLastRow, onPress}) => {
   //Mudar no futuro Views para Fragments, e colocar como flex Wrap
-  const createCols = (col, i) => ({
+  const createCols = (tile, i) => ({
     left: {
-      onPress: ()=>onPress("horz", i, false),
+      onPress: ()=>onPress(false, i, false),
       value: horz[0][i],
       isLastColumn: i===vert.length-2,
     },
     center: {
       isVert: true,
-      onPress: (isLast)=>onPress("vert", i, isLast),
-      value: col,
+      onPress: (isLast)=>onPress(true, i, isLast),
+      value: vert[i],//um dos dois sempre é verdadeiro 
       nextValue: vert[i+1],
       isLastColumn: i===vert.length-2,
+      isTileSelected: tile === 4,
     },
     right: {
       value: horz[1][i],
-      onPress: ()=>onPress("horz", i, true),
+      onPress: ()=>onPress(false, i, true),
       isLastColumn: i===vert.length-2,
       isLastRow
     }
@@ -38,10 +39,14 @@ export default ({vert, horz, isLastRow, onPress}) => {
   return (
     <View style={{flex: 1, flexDirection: "row"}} >
       {
-        vert.slice(0, vert.length-1).map((col, i)=>(
+        tiles.map((tile, i) => (
+          <CreateCol key={i} cols={createCols(tile, i)} />
+        ))
+
+        /*vert.slice(0, vert.length-1).map((col, i)=>(
           <CreateCol key={i} cols={createCols(col, i)}
           />
-        ))
+        ))*/
       }
     </View>
   )

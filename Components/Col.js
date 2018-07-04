@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react';
-import { View, TouchableOpacity } from 'react-native'; //TouchableWithoutFeedback.
+import { View, TouchableWithoutFeedback } from 'react-native'; //TouchableWithoutFeedback.
 
-const createStyle = (isBlock, isBig, isLastRow, hasRight, selected) => (
+const createStyle = (isBlock, isBig, isLastRow, hasRight, selected, isTileSelected) => (
   {
       flex: isBig?5:1,
       borderColor: "black",
@@ -9,8 +9,9 @@ const createStyle = (isBlock, isBig, isLastRow, hasRight, selected) => (
       borderTopWidth: 1,
       borderBottomWidth: isLastRow&&1,
       borderRightWidth: hasRight&&1,
-      backgroundColor: isBlock? "red":
-                        selected?"black":"white",
+      backgroundColor: isBig&&isTileSelected?"green"
+                        :isBlock? "red"
+                        :selected?"black":"white",
   }
 )
 const createValidOnPress = (onPress, isBig, isVert, isLast) => {
@@ -19,13 +20,17 @@ const createValidOnPress = (onPress, isBig, isVert, isLast) => {
   //isLast can be undefined
 }
 
-export default ({isVert, value, nextValue, isLastColumn, isLastRow, onPress}) => {
+export default ({isVert, value, nextValue, isLastColumn, isLastRow, onPress, isTileSelected}) => {
   const MinElement = ({isBlock, isBig, isLast, selected}) => {
     const validOnPress = createValidOnPress(onPress, isBig, isVert, isLast);
-    const style = createStyle(isBlock, isBig, isLastRow, isLast, selected)
+    const style = createStyle(isBlock, isBig, isLastRow, isLast, selected, isTileSelected)
     const isTouchable = isBig && !isVert || !isBig && isVert;
 
-    return isTouchable? <TouchableOpacity onPress={validOnPress} style={style}/>
+    return isTouchable? <TouchableWithoutFeedback onPress={validOnPress}
+                          hitSlop={{top:15, bottom: 15, left:15, right:15}}
+                        >
+                          <View style={style}/>
+                        </TouchableWithoutFeedback>
                       : <View style={style}/>
   }
   return (

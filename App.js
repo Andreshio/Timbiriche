@@ -1,7 +1,8 @@
 import React, {Component, Fragment} from 'react';
 import { StyleSheet, Text, View, Alert } from 'react-native';
-
 import Row from './Components/Row';
+
+import { onPress } from './utils';
 
 const styles = StyleSheet.create({
   container: {
@@ -26,12 +27,68 @@ export default class App extends Component {
       ),
     }
   }
-  onPress = (type, row, col, isLast) => {
-    const  horz = isLast?row+1:row;
-    const  vert = isLast?col+1:col;
+  select = (isVert, row, col, isLast) => {
+    let changedArray, toModify, index, wasChanged;
+    if(isVert){
+      toModify = "vertical";
+      index = isLast?col+1:col;
 
-    const value = type === "vert"?vert:horz;
-    console.log(`${type}-${value}`);
+      changedArray = this.state[toModify];
+      if(!changedArray[row][index]){
+        changedArray[row][index] = true;
+        wasChanged = true;
+      } else {
+        wasChanged = false;
+      }
+    } else {
+      toModify = "horizontal";
+      index = isLast?row+1:row;
+
+      changedArray = this.state[toModify];
+
+      if(!changedArray[index][col]){
+        changedArray[index][col] = true;
+        wasChanged = true;
+      } else {
+        wasChanged = false;
+      }
+    }
+    return {
+      wasChanged,
+      newState: {
+      ...this.state,
+        [toModify]:changedArray,
+      }
+    }
+  }
+  addToBoard = (isVert, row, col, isLast) => {
+    const newBoard = this.state.board;
+    if(isVert){
+      if(col === 0 || isLast){
+        newBoard[row][col]++;
+      } else {
+        newBoard[row][col-1]++;
+        newBoard[row][col]++;
+      }
+    } else {
+      if(row === 0 || isLast){
+        newBoard[row][col]++;
+      } else {
+        newBoard[row-1][col]++;
+        newBoard[row][col]++;
+      }
+    }
+    return newBoard
+  }
+  handlePress = (isVert, row, col, isLast) => {
+    const {wasChanged, newState} = this.select(isVert, row, col, isLast);
+    if(wasChanged){
+      const board = this.addToBoard(isVert, row, col, isLast);
+      this.setState({
+        ...newState,
+        board,
+      })
+    }
   };
   render() {
     return (
@@ -39,12 +96,13 @@ export default class App extends Component {
         <View style={{flex: 1}} />
         <View style={{flex: 2, backgroundColor: "white", aspectRatio: 1}} >
           {
-            this.state.board.map( (tile, i) =>
+            this.state.board.map( (tiles, i) =>
               <Row
                 key={i}
-                onPress={(type, col, isLast)=>this.onPress(type, i, col, isLast)}
-                vert={this.state.vertical[i]}
+                onPress={(type, col, isLast)=>this.handlePress(type, i, col, isLast)}
+                tiles={tiles}
                 isLastRow={i===this.state.vertical.length-1}
+                vert={this.state.vertical[i]}
                 horz={[
                   this.state.horizontal[i],
                   this.state.horizontal[i+1]

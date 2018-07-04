@@ -1,51 +1,14 @@
 import React, {Component, Fragment} from 'react';
 import { StyleSheet, Text, View, Alert } from 'react-native';
 
-import Line from './Components/Line'
-
+import Row from './Components/Row';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //backgroundColor: '#fff',
     alignItems: 'center',
-    //justifyContent: 'center',
   },
 });
-
-const Row = ({vert, horz, isLastRow, onPress}) => {
-  //Mudar no futuro Views para Fragments, e colocar como flex Wrap
-  return (
-    <View style={{flex: 1, flexDirection: "row"}} >
-      {
-        vert.slice(0, vert.length-1).map((col, i)=>
-          <View key={i} style={{flex:1}}>
-            <Line
-              onPress={()=>onPress("horz", i, false)}
-              value={horz[0][i]}
-              isLastColumn={i===vert.length-2}
-            />
-            <Line
-              isVert
-              onPress={(isLast)=>onPress("vert", i, isLast)}
-              value={/*isLastRow?vert[i+1]:*/col}
-              nextValue={vert[i+1]}
-              isLastColumn={i===vert.length-2}
-            />
-            {isLastRow&&
-              <Line
-                value={horz[1][i]}
-                onPress={()=>onPress("horz", i, true)}
-                isLastRow
-                isLastColumn={i===vert.length-2}
-              />
-            }
-          </View>
-        )
-      }
-    </View>
-  )
-}
 
 export default class App extends Component {
   constructor() {

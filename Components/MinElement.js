@@ -1,6 +1,27 @@
 import React, {Component, Fragment} from 'react';
-import { View, TouchableWithoutFeedback } from 'react-native'; //TouchableWithoutFeedback.
+import { View, TouchableOpacity } from 'react-native'; //TouchableWithoutFeedback.
 
+import Clickable from './Clickable'
+//import { connect } from 'react-redux';
+
+export default ({i, j, isLast, isBig}) => {
+  const style = {flex: 1, borderWidth: 1};
+  if(isBig){
+    return (
+      <Fragment>
+        <View style={style} />
+        <View style={{...style, flex: 5}} />
+        {isLast&&
+          <View style={style} />
+        }
+      </Fragment>
+    )
+  } else {
+    return <Clickable i={i} j={j} isLast={isLast} />
+  }
+}
+
+/*
 const createStyle = (isBlock, isBig, isLastRow, hasRight, selected, isTileSelected) => (
   {
       flex: isBig?5:1,
@@ -43,3 +64,4 @@ export default ({isVert, value, nextValue, isLastColumn, isLastRow, onPress, isT
     </View>
   )
 }
+*/

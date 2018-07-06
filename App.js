@@ -1,19 +1,36 @@
 import React, {Component, Fragment} from 'react';
-import { StyleSheet, Text, View, Alert } from 'react-native';
-import Row from './Components/Row';
+import { StyleSheet, View, Text } from 'react-native';
 
-import { onPress } from './utils';
+import Board from './Components/Board';
+//import Row from './Components/Row';
+//import { onPress } from './utils';
+import { createStore } from 'redux'
+import { Provider } from 'react-redux';
+import rootReducer from './State';
 
+const store = createStore(rootReducer)
+
+
+export default class App extends Component {
+  render(){
+    return(
+      <Provider store={store}>
+        <View style={{flex: 1, justifyContent: "center"}}>
+          <Board />
+        </View>
+      </Provider>
+    )
+  }
+}
+
+/*
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
   },
 });
-
-export default class App extends Component {
-  constructor() {
-    super();
+/*
     this.size = 3;
     this.state = {
       board: [...Array(this.size)].map(()=>
@@ -92,27 +109,36 @@ export default class App extends Component {
   };
   render() {
     return (
-      <View style={styles.container}>
-        <View style={{flex: 1}} />
-        <View style={{flex: 2, backgroundColor: "white", aspectRatio: 1}} >
-          {
-            this.state.board.map( (tiles, i) =>
-              <Row
-                key={i}
-                onPress={(type, col, isLast)=>this.handlePress(type, i, col, isLast)}
-                tiles={tiles}
-                isLastRow={i===this.state.vertical.length-1}
-                vert={this.state.vertical[i]}
-                horz={[
-                  this.state.horizontal[i],
-                  this.state.horizontal[i+1]
-                ]}
-              />
-            )
-          }
+      <Provider store={store}>
+        <View />
+      </Provider>
+    )
+  }
+}
+/*
+        <View style={styles.container}>
+          <View style={{flex: 1}} />
+          <View style={{flex: 2, backgroundColor: "white", aspectRatio: 1}} >
+            {
+              this.state.board.map( (tiles, i) =>
+                <Row
+                  key={i}
+                  onPress={(type, col, isLast)=>this.handlePress(type, i, col, isLast)}
+                  tiles={tiles}
+                  isLastRow={i===this.state.vertical.length-1}
+                  vert={this.state.vertical[i]}
+                  horz={[
+                    this.state.horizontal[i],
+                    this.state.horizontal[i+1]
+                  ]}
+                />
+              )
+            }
+          </View>
+          <View style={{flex: 1}} />
         </View>
-        <View style={{flex: 1}} />
-      </View>
+      </Provider>
     );
   }
 }
+*/

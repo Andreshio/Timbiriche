@@ -1,7 +1,22 @@
 import React, {Component, Fragment} from 'react';
 import { View } from 'react-native';
-import Col from './Col';
+import MinElement from './MinElement';
 
+export default ({i, row, isBig, show}) => {
+  const style = {flex: isBig?5:1, flexDirection: "row"}
+  if(show){
+    return (
+      <View style={style}>
+        {
+          row.map((col, j) => <MinElement key={j} i={i} j={j} isLast={j===row.length-1} isBig={isBig} />)
+        }
+      </View>
+    )
+  }
+  return null;
+}
+
+/*
 const CreateCol  = ({cols}) => (
   <View style={{flex:1}}>
     <Col {...cols.left} />
@@ -23,7 +38,7 @@ export default ({tiles, vert, horz, isLastRow, onPress}) => {
     center: {
       isVert: true,
       onPress: (isLast)=>onPress(true, i, isLast),
-      value: vert[i],//um dos dois sempre é verdadeiro 
+      value: vert[i],//um dos dois sempre é verdadeiro
       nextValue: vert[i+1],
       isLastColumn: i===vert.length-2,
       isTileSelected: tile === 4,
@@ -47,7 +62,9 @@ export default ({tiles, vert, horz, isLastRow, onPress}) => {
           <CreateCol key={i} cols={createCols(col, i)}
           />
         ))*/
+        /*
       }
     </View>
   )
 }
+*/

@@ -1,11 +1,10 @@
 import Redux from 'redux';
-import { handleClick, generator } from '../utils';
+import { clickManipuations } from '../utils';
 
 const size = 3;
-
 const createArray = (row, col, value) => {
   return [...Array(row)].map(()=>
-    [...Array(col)].map(()=>0)
+    [...Array(col)].map(()=>value)
   )
 }
 
@@ -14,22 +13,17 @@ const initialState = () => ({
   vertical: createArray(size, size+1, false),
   horizontal: createArray(size+1, size, false),
   clickables: createArray(size+1, size+1, 0),
+  clicked: {i: null, j: null},
 });
 
 export default (state = initialState(), action) => {
-  //const click = generator(state.clickables);
-  //click.next();
-  /*const generateClick = ()=>{
-    click.next({clickables:state.clickables, action})
-    return handleClick(state.clickables, action)
-  };*/
-  //click.next();
   switch (action.type) {
       case 'CLICK':
+        const {clickables, clicked} = clickManipuations(state, action);
         return {
           ...state,
-          clickables: handleClick(state.clickables, action)//click.next(action).value,
-          //handleClick(state.clickables, action),
+          clickables,
+          clicked
         }
     default:
       return state

@@ -13,7 +13,7 @@ const initialState = () => ({
   vertical: createArray(size, size+1, false),
   horizontal: createArray(size+1, size, false),
   clickables: createArray(size+1, size+1, 0),
-  clicked: {i: null, j: null},
+  clicked: [],
 });
 
 export default (state = initialState(), action) => {

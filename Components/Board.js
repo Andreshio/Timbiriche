@@ -4,14 +4,20 @@ import { connect } from 'react-redux';
 
 import MinRow from './MinRow';
 
-const mapStateToProps = ({tiles}) => ({tiles});
+const style = {
+  width: "100%",
+  aspectRatio: 1, 
+  justifyContent: "center", 
+  alignItems: "center",
+  //backgroundColor: "#ECEFF1",
+}
 
-const style = {width: "100%", aspectRatio: 1};
+const mapStateToProps = ({board: {tiles, hitArea}}) => ({tiles, hitArea});
 
 export default connect(mapStateToProps)(
-  ({tiles}) => {
+  ({tiles, hitArea}) => {
     return (
-      <View style={style}>
+      <View style={{...style, padding: hitArea}}>
         {
           tiles.map((row, i) =>
             <Fragment key={i}>

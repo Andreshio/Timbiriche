@@ -3,23 +3,23 @@ import { View } from 'react-native'; //TouchableWithoutFeedback.
 
 import { connect } from 'react-redux';
 
-const style = {flex: 1, borderWidth: 1};
+const style = {flex: 1};
 
-const mapStateToProps = ({vertical, tiles}, {i, j, isLast}) => ({
-  isSelected: [
+const mapStateToProps = ({board: {vertical, colorTiles}}, {i, j, isLast}) => ({
+  areClicked: [
     vertical[i][j],
     vertical[i][j+1]
   ],
-  tiles: tiles[i][j] === 4,
+  color: colorTiles[i][j],
 })
 
 export default connect(mapStateToProps)(
-  ({isSelected, tiles, isLast}) =>(
+  ({areClicked, color, isLast}) =>(
     <Fragment>
-      <View style={{...style, backgroundColor: isSelected[0]?"black":"white"}} />
-      <View style={{...style, flex: 5, backgroundColor: tiles?"orange":"white"}} />
+      <View style={{...style, backgroundColor: areClicked[0]?"#263238":"white"}} />
+      <View style={{...style, flex: 5, backgroundColor: color}} />
       {isLast&&
-        <View style={{...style, backgroundColor: isSelected[1]?"black":"white"}} />
+        <View style={{...style, backgroundColor: areClicked[1]?"#263238":"white"}} />
       }
     </Fragment>
   )

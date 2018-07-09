@@ -4,31 +4,39 @@ import { View, TouchableOpacity } from 'react-native'; //TouchableWithoutFeedbac
 import { connect } from 'react-redux';
 import { click } from '../State/actions';
 
-const colorTypes = ["white", "#6495ED", "blue"]
+const colorTypes = ["#607D8B", "#ef5350", "#b71c1c", "#263238"]
 
-const mapStateToProps = ({clickables, horizontal}, {i, j, isLast}) => ({
-  clickColors: [
-    colorTypes[ clickables[i][j] ],
-    colorTypes[ clickables[i][j+1] ]
+const mapStateToProps = ({board: {clickables, horizontal, hitArea}}, {i, j, isLast}) => ({
+  clickValues: [
+    clickables[i][j],
+    clickables[i][j+1],
   ],
   isTileSelected: horizontal[i][j],
+  hitArea,
 })
 
 const mapDispatchToProps = (dispatch) => ({handleClick: (i, j)=>dispatch(click(i, j))})
 
-const style = {flex: 1, borderWidth: 1};
+const style = {flex: 1, zIndex: 1};
+
+//const hitSlopArea = 20;
+const createHitSlop = (hitArea) => ({top: hitArea,  right: hitArea, left: hitArea, bottom: hitArea});
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  ({i, j, isLast, clickColors, isTileSelected, handleClick}) =>  (
+  ({i, j, isLast, clickValues, isTileSelected, hitArea, handleClick}) =>  (
     <Fragment>
       <TouchableOpacity
-        style={{...style, backgroundColor: clickColors[0]}}
+        hitSlop={createHitSlop(hitArea)}
+        disabled={clickValues[0]===3}
+        style={{...style, backgroundColor: colorTypes[ clickValues[0] ] }}
         onPress={()=>handleClick(i, j)}
       />
-      <View style={{...style, flex: 5, backgroundColor: isTileSelected?"black":"white"}} />
+      <View style={{...style, flex: 5, backgroundColor: isTileSelected?"#263238":"white", zIndex: 0}} />
       {isLast&&
         <TouchableOpacity
-          style={{...style, backgroundColor: clickColors[1]}}
+          hitSlop={createHitSlop(hitArea)}
+          disabled={clickValues[1]===3}
+          style={{...style, backgroundColor: colorTypes[ clickValues[1] ]}}
           onPress={()=>handleClick(i, j+1)}
         />
       }

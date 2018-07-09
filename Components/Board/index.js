@@ -17,7 +17,7 @@ const mapStateToProps = ({board: {tiles, hitArea}}) => ({tiles, hitArea});
 export default connect(mapStateToProps)(
   ({tiles, hitArea}) => {
     return (
-      <View style={{...style, padding: hitArea}}>
+      <View style={{...style}}>
         {
           tiles.map((row, i) =>
             <Fragment key={i}>

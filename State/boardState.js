@@ -1,6 +1,6 @@
 import { clickManipuations } from '../utils';
 
-const size = 5;
+const size = 8;
 const createArray = (row, col, value) => {
   return [...Array(row)].map(()=>
     [...Array(col)].map(()=>value)
@@ -9,16 +9,30 @@ const createArray = (row, col, value) => {
 
 const initialState = () => ({
   turn: 0,
+  gameEnded: false,
+  classification: [],
   currentPlayer: 0,
   players: [
     {
-      color: "pink",
+      color: "#ff1744",
       points: 0,
     }, 
     {
-      color: "green",
+      color: "#00E676",
       points: 0,
-    }
+    },/*
+    {
+      color: "#FFEA00",
+      points: 0,
+    },
+    {
+      color: "#651FFF",
+      points: 0,
+    },
+    {
+      color: "#2979FF",
+      points: 0,
+    }*/
   ],
 
   hitArea: 25,

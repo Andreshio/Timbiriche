@@ -32,6 +32,22 @@ export const equalsZero = (oldState, action) => {
   return newState;
 }
 
+const getClassification = (players) => {
+  const ordem = players.sort((a, b)=>b.points - a.points)
+  const posições = ordem.reduce((a, b) => {
+    if(a.length === 0){
+      return [[b]];
+    };
+    if(a[a.length-1][0].points === b.points){
+      return [
+        ...a.slice(0, a.length-1),
+        [...a[a.length-1], b]
+      ]            
+    }
+    return [...a, [b]];
+  }, []);
+  return posições;
+}
 
 export const equalsOne = (oldState, action) => {
   const newState = {...oldState};
@@ -58,15 +74,47 @@ export const equalsOne = (oldState, action) => {
     newState[type][row][col] = true;//!oldState[type][row][col];
     newState.clickables = oldState.clickables.map(returnThreeIfIsLast);
     newState.clicked = [];
-
-    newState.currentPlayer.points += points;
+    newState.players = oldState.players.map((p)=>( {...p}) );
+    newState.players[oldState.currentPlayer].points += points;
     if(points === 0){
       newState.currentPlayer = oldState.currentPlayer === oldState.players.length-1? 0: oldState.currentPlayer+1;
     }
     newState.turn = oldState.turn+1;
+
+    const playedTiles = newState.players.reduce((a, b) => a+b.points,0);
+    if(playedTiles === oldState.tiles.length**2){
+      newState.gameEnded = true;
+      newState.classification = getClassification(newState.players);
+    }
+    //console.log(playedTiles)
   }
   return newState;
 }
+/*
+const ordem = this.state.players.sort((a, b)=>{
+        return b.points - a.points;
+      })
+const posições = ordem.reduce((a, b) => {
+  if(a.length === 0){
+
+    return [[b]];
+  };
+  if(a[a.length-1][0].points === b.points){
+    return [
+      ...a.slice(0, a.length-1),
+      [...a[a.length-1], b]
+    ]            
+  }
+  return [...a, [b]];
+}, []);
+if(posições[0].length > 1){
+  alert("EMPATE! \n" + 
+        posições[0].reduce( (a, b)=> a + b.color + "\n" , "")
+       )
+} else {
+  alert(posições[0][0].color + " VENCEU!")
+}
+*/
 
 
 export const equalsTwo = (oldState, action) => {

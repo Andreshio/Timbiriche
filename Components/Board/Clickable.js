@@ -2,7 +2,7 @@ import React, {Component, Fragment} from 'react';
 import { View, TouchableOpacity } from 'react-native'; //TouchableWithoutFeedback.
 
 import { connect } from 'react-redux';
-import { click } from '../State/actions';
+import { click } from '../../State/actions';
 
 const colorTypes = ["#607D8B", "#ef5350", "#b71c1c", "#263238"]
 

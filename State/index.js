@@ -19,11 +19,20 @@ const initialState = () => ({
 export default (state = initialState(), action) => {
   switch (action.type) {
       case 'CLICK':
-        const {clickables, clicked} = clickManipuations(state, action);
+        const {
+          clickables, 
+          clicked,
+          vertical,
+          horizontal,
+          tiles
+        } = clickManipuations(state, action);
         return {
           ...state,
           clickables,
-          clicked
+          clicked,
+          vertical,
+          horizontal,
+          tiles,
         }
     default:
       return state

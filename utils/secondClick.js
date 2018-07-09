@@ -11,6 +11,31 @@ const testIfIsLast = (oldState, action) => {
   return testState.clickables.reduce(addIfOne, 0) === 1;
 }
 
+const addToTiles = (tiles, {type, row, col}) => {
+  const newTiles = [...tiles];
+  if(type === 'vertical'){
+    if(col === 0){
+      tiles[row][col]++;
+    } else if(col > 0 && col < tiles.length){
+      tiles[row][col-1]++;
+      tiles[row][col]++;
+    } else {
+      tiles[row][col-1]++;
+    }
+
+  } else {
+    if(row === 0){
+      tiles[row][col]++;
+    } else if(row > 0 && row < tiles.length){
+      tiles[row-1][col]++;
+      tiles[row][col]++;
+    } else {
+      tiles[row-1][col]++;
+    }
+  }
+  return tiles;
+}
+
 export const secondClick = (oldState, action) => {
   const oldClicked = oldState.clicked[0];
   const oldClickabes = oldState.clickables;
@@ -29,5 +54,6 @@ export const secondClick = (oldState, action) => {
   }
   const clicked = [oldClicked, {...action, isLast}];
   const tileInfo = {type, row, col};
-  return {tileInfo, clicked};
+  const tiles = addToTiles(oldState.tiles, tileInfo)
+  return {tileInfo, tiles, clicked};
 }

@@ -11,7 +11,7 @@ export const clickManipuations = (oldState, action) => {
   } else if(previousValue === 2){
     return equalsTwo()
   } else if(previousValue === 3){
-  	const {clickables, clicked} = oldState;
-  	return {clickables, clicked};
+  	const {clickables, clicked, vertical, horizontal, tiles} = oldState;
+  	return {clickables, clicked, vertical, horizontal, tiles};
   }
 }

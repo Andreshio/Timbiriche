@@ -19,17 +19,20 @@ export const createFunctions = (oldState, action) => {
       return newState;
     },
     equalsOne: () => {
-      const {tileInfo, clicked} = secondClick(oldState, action);
+      const {tileInfo, clicked, tiles} = secondClick(oldState, action);
       const {type, row, col} = tileInfo;
-
+      console.log(tiles);
       if(!newState[type][row][col]){
-
-        newState[type][row][col] = !oldState[type][row][col];
+        newState[type] = newState[type].slice();
+        //newState[type][row] = newState[type][row].slice();
+        //console.log(newState[type][row])
+        newState[type][row][col] = true;//!oldState[type][row][col];
 
         const returnThreeIfIsLast = createReturnThreeIfIsLast(clicked)
 
         newState.clickables = oldState.clickables.map(returnThreeIfIsLast);
         newState.clicked = [];
+        newState.tiles = tiles;
       }
       return newState;
     },

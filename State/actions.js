@@ -1,37 +1,35 @@
-export const click0 = (i, j) => ({type: 'CLICK', i, j });
+import { runBot } from '../utils/runBot';
+
+//export const click0 = (i, j) => ({type: 'CLICK', i, j });
+
+const asyncDispatch = (toDispatch, delay) => {
+	return new Promise((resolve) => {
+		setTimeout(()=>{
+			toDispatch();
+			resolve();
+		}, delay)
+	})
+}
 
 export const click = (i, j) => {
-	return (dispatch, getState) => {
+	return async (dispatch, getState) => {
 	    // 0let {board: {players, currentPlayer}} = getState();
 
 	    // console.log(players[currentPlayer].isBot)
 
 	    dispatch({type: 'CLICK', i, j });
 	    
-	    const {board: {tiles, players, currentPlayer}} = getState();
+	    let {board: {tiles, players, currentPlayer, vertical, horizontal}} = getState();
 
-	    // console.log(players[currentPlayer].isBot);
-	    
+	    while(players[currentPlayer].isBot){
+	    	const botClicks = runBot(tiles, vertical, horizontal);
+	    	//console.log(botClicks);
 
-	    if(players[currentPlayer].isBot){
-	    	const playedTiles = players.reduce((a, b) => a+b.points,0);
-	    	const possibilities = tiles.length*tiles.length - playedTiles;
-
-	    	console.log("possibilities")
-	    	console.log(possibilities)
-	    	console.log("random");
-	    	console.log(Math.floor(Math.random()*possibilities))
-
-	    	console.log(tiles);
-	    	setTimeout(()=>
-	    		dispatch({type: 'CLICK', i: 0, j: 0}),
-	    		1664
-	    	);
-	    	setTimeout(()=>
-	    		dispatch({type: 'CLICK', i: 0, j: 1}),
-	    		1664
-	    	)
-	    	//dispatch({type: 'CLICK', i: 0, j: 1})
+	    	await asyncDispatch(()=>dispatch({type: 'CLICK', ...botClicks[0]}), 500);
+	    	await asyncDispatch(()=>dispatch({type: 'CLICK', ...botClicks[1]}), 500)
+	 
+	    	await ({board: {tiles, players, currentPlayer, vertical, horizontal}} = getState());
+	    	
 	    }
 	}
 }

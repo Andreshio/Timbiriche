@@ -6,7 +6,12 @@ import { click } from '../../State/actions';
 
 const colorTypes = ["#607D8B", "#ef5350", "#b71c1c", "#263238"]
 
-const mapStateToProps = ({board: {clickables, horizontal, hitArea}}, {i, j, isLast}) => ({
+const mapStateToProps = (
+    {board: {
+      clickables, horizontal, hitArea, players, currentPlayer
+    }}, {i, j, isLast}
+  ) => ({
+  isBot: players[currentPlayer].isBot,
   clickValues: [
     clickables[i][j],
     clickables[i][j+1],
@@ -23,11 +28,14 @@ const style = {flex: 1, zIndex: 1};
 const createHitSlop = (hitArea) => ({top: hitArea,  right: hitArea, left: hitArea, bottom: hitArea});
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  ({i, j, isLast, clickValues, isTileSelected, hitArea, handleClick}) =>  (
+  ({
+    i, j, isLast, clickValues, isBot,
+    isTileSelected, hitArea, handleClick
+  }) =>  (
     <Fragment>
       <TouchableOpacity
         hitSlop={createHitSlop(hitArea)}
-        disabled={clickValues[0]===3}
+        disabled={clickValues[0]===3 || isBot}
         style={{...style, backgroundColor: colorTypes[ clickValues[0] ] }}
         onPress={()=>handleClick(i, j)}
       />
@@ -35,7 +43,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       {isLast&&
         <TouchableOpacity
           hitSlop={createHitSlop(hitArea)}
-          disabled={clickValues[1]===3}
+          disabled={clickValues[1]===3 || isBot}
           style={{...style, backgroundColor: colorTypes[ clickValues[1] ]}}
           onPress={()=>handleClick(i, j+1)}
         />

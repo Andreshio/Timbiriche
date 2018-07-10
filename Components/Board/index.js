@@ -12,7 +12,13 @@ const style = {
   //backgroundColor: "#ECEFF1",
 }
 
-const mapStateToProps = ({board: {tiles, hitArea}}) => ({tiles, hitArea});
+const mapStateToProps = ({board: {
+    tiles, hitArea, players, currentPlayer}
+  }) => ({
+    tiles, hitArea,
+    isBot: players[currentPlayer].isBot,
+  }
+);
 
 export default connect(mapStateToProps)(
   ({tiles, hitArea}) => {

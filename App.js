@@ -1,14 +1,19 @@
 import React, {Component, Fragment} from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+
 import rootReducer from './State';
 
 import GameInfo from './Components/GameInfo';
 import Board from './Components/Board/';
 
-const store = createStore(rootReducer)
+const store = createStore(
+  rootReducer,
+  applyMiddleware(thunk)
+);
 
 export default class App extends Component {
   render(){

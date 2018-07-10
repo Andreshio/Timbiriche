@@ -1,6 +1,6 @@
 import { clickManipuations } from '../utils';
 
-const size = 8;
+const size = 5;
 const createArray = (row, col, value) => {
   return [...Array(row)].map(()=>
     [...Array(col)].map(()=>value)
@@ -16,23 +16,13 @@ const initialState = () => ({
     {
       color: "#ff1744",
       points: 0,
+      isBot: false,
     }, 
     {
       color: "#00E676",
       points: 0,
-    },/*
-    {
-      color: "#FFEA00",
-      points: 0,
+      isBot: true,
     },
-    {
-      color: "#651FFF",
-      points: 0,
-    },
-    {
-      color: "#2979FF",
-      points: 0,
-    }*/
   ],
 
   hitArea: 25,

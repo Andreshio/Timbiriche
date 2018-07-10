@@ -44,12 +44,24 @@ export default connect(mapStateToProps)(
 				<View style={{flex:1, justifyContent: "center", alignItems: "center"}}>
 					<View style={{width: "50%", aspectRatio: 1, backgroundColor: players[currentPlayer].color}} />
 				</View>
-				<View style={{flex:1, height: "50%" ,justifyContent: "center", alignItems: "center", flexWrap: 'wrap'}}>
+				<View style={{flex:1, height: "50%" ,justifyContent: "center", alignItems: "center"}}>
 					{
 						players.map((player, i) => (
 								<Text key={i} style={{color: player.color, fontSize: 45}}> {player.points} </Text>
 							)
 						)
+					}
+				</View>
+				<View style={{flex:1, height: "50%" ,justifyContent: "center", alignItems: "center"}}>
+					{
+						players[currentPlayer].isBot?
+							<Text style={{color: "white"}}>
+								bot
+							</Text>
+						:
+							<Text style={{color: "white"}}>
+								human
+							</Text> 
 					}
 				</View>
 			</View>

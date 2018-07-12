@@ -25,8 +25,8 @@ export const click = (i, j) => {
 	    	const botClicks = runBot(tiles, vertical, horizontal);
 	    	//console.log(botClicks);
 
-	    	await asyncDispatch(()=>dispatch({type: 'CLICK', ...botClicks[0]}), 500);
-	    	await asyncDispatch(()=>dispatch({type: 'CLICK', ...botClicks[1]}), 500)
+	    	await asyncDispatch(()=>dispatch({type: 'CLICK', ...botClicks[0]}), 0);
+	    	await asyncDispatch(()=>dispatch({type: 'CLICK', ...botClicks[1]}), 0)
 	 
 	    	await ({board: {tiles, players, currentPlayer, vertical, horizontal}} = getState());
 	    	

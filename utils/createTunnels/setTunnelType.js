@@ -1,4 +1,4 @@
-import { handleLines } from './runBot';
+import { handleLines } from '../runBot';
 export const setTunnelType = (col, vertical, horizontal) => {
 	const lines = handleLines(col.i, col.j, vertical, horizontal);
 
@@ -25,3 +25,4 @@ export const setTunnelType = (col, vertical, horizontal) => {
     }
     return col;
 }
+

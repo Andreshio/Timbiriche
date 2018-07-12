@@ -1,4 +1,4 @@
-import { createTunnels } from './createTunnels';
+import { createTunnels } from './createTunnels/';
 
 export const handleLines = (i, j, vertical, horizontal) => {
     const lines = {vertical, horizontal};

@@ -5,56 +5,57 @@ import {
     verticalSequenceTest
 } from './tunnelTestsAndIndexes';
 
-export const caseBottomRightTunnel = (a, b) => {
-    const horizontalTunnelIndex = handleNewHorizontal(a, b);
-    const verticalTunnelIndex = handleNewVertical(a, b);
+export const caseBottomRightTunnel = (tunnels, circles, b) => {
+    const horizontalTunnelIndex = handleNewHorizontal(tunnels, b);
+    const verticalTunnelIndex = handleNewVertical(tunnels, b);
 
     if(horizontalTunnelIndex !== -1 && verticalTunnelIndex !== -1){
 
-        const frontArray = a[horizontalTunnelIndex];
-        const backArray = a[verticalTunnelIndex];
+        const frontArray = tunnels[horizontalTunnelIndex];
+        const backArray = tunnels[verticalTunnelIndex];
 
 
         if(horizontalTunnelIndex === verticalTunnelIndex){
-            console.log("CIRCLE")
-        }
+            const circleIndex = horizontalTunnelIndex;
+            circles.push(tunnels[circleIndex])
+        } else {
 
-
-        const shouldFrontReverse = horizontalSequenceTest(frontArray[0], b);
-        const shouldBackReverse = !verticalSequenceTest(backArray[0], b)
-        if(shouldFrontReverse){
-            frontArray.reverse()
+            const shouldFrontReverse = horizontalSequenceTest(frontArray[0], b);
+            const shouldBackReverse = !verticalSequenceTest(backArray[0], b)
+            if(shouldFrontReverse){
+                frontArray.reverse()
+            }
+            if(shouldBackReverse){
+                backArray.reverse()
+            }
+            tunnels[horizontalTunnelIndex] = [...frontArray, b, ...backArray ];
         }
-        if(shouldBackReverse){
-            backArray.reverse()
-        }
-
-        a[horizontalTunnelIndex] = [...frontArray, b, ...backArray ];
-        a = [
-            ...a.slice(0, verticalTunnelIndex), 
-            ...a.slice(verticalTunnelIndex+1, a.length)
+        //remove array extra -> pode ser o array círculo; 
+        tunnels = [
+            ...tunnels.slice(0, verticalTunnelIndex), 
+            ...tunnels.slice(verticalTunnelIndex+1, tunnels.length)
         ];
 
     } else {
         if(horizontalTunnelIndex !== -1){
-            const isFirst = horizontalSequenceTest(a[horizontalTunnelIndex][0], b)
+            const isFirst = horizontalSequenceTest(tunnels[horizontalTunnelIndex][0], b)
             if(isFirst){
-                a[horizontalTunnelIndex].unshift(b);
+                tunnels[horizontalTunnelIndex].unshift(b);
             } else {
-                a[horizontalTunnelIndex].push(b);
+                tunnels[horizontalTunnelIndex].push(b);
              }
         } else if(verticalTunnelIndex !==-1) {
-            const isFirst = verticalSequenceTest(a[verticalTunnelIndex][0], b)
+            const isFirst = verticalSequenceTest(tunnels[verticalTunnelIndex][0], b)
             if(isFirst){
-                a[verticalTunnelIndex].unshift(b);
+                tunnels[verticalTunnelIndex].unshift(b);
 
             } else {
-                a[verticalTunnelIndex].push(b);
+                tunnels[verticalTunnelIndex].push(b);
             }
 
         } else {
-            a.push([b]);
+            tunnels.push([b]);
         }
     }
-    return a;
+    return {tunnels, circles};
 }

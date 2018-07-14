@@ -1,5 +1,5 @@
 import { firstClick } from './firstClick';
-import { addIfOne } from './createFunctions';
+import { addIfOne } from './';
 
 const testIfIsLast = (oldState, action) => {
   const testState = {...oldState};

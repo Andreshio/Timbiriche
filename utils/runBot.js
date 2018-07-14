@@ -24,31 +24,18 @@ export const runBot = (tiles, vertical, horizontal) => {
 
     let betterOptions = playableTiles;
 
-    if(level === 1){
+    if(level >= 1){
         const possiblePoints = playableTiles.filter(({val}) => val===3);
         if(possiblePoints.length>0){
             betterOptions = possiblePoints;
         }
     }
-    if(level === 2){
-        //const possiblePoints = playableTiles.filter(({val}) => val===3);
-        /*if(possiblePoints.length>0){
-            betterOptions = possiblePoints;
-        }*/
-        const tunnels = createTunnels(playableTiles, vertical, horizontal);
-
-            //console.log(tunnels);
-            //console.log("\n\n")
-            /*const notGivingPoints = playableTiles.filter(({val})=>val!==2);
-            if(notGivingPoints.length>0){
-                betterOptions = notGivingPoints;
-            }*/
-        //}
-    }
+    if(level >= 2){
+        const {tunnels, circles} = createTunnels(playableTiles, vertical, horizontal);
     
-    //const betterOptions = possiblePoints.length>0? possiblePoints : playableTiles;
 
-    const randomTile = 0; //Math.floor(Math.random()*betterOptions.length);
+    }
+    const randomTile = 0;// Math.floor(Math.random()*betterOptions.length);
 
     const {i: botI, j: botJ} = betterOptions[randomTile]
 
@@ -56,7 +43,7 @@ export const runBot = (tiles, vertical, horizontal) => {
 
     const randomLine = Math.floor(Math.random()*relevantLines.length);
     const selectedLine = relevantLines[randomLine];
-    
+
 
 
     let botClicks =  [

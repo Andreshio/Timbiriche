@@ -1,4 +1,4 @@
-import { equalsZero, equalsOne, equalsTwo } from './createFunctions';
+import { equalsZero, equalsOne, equalsTwo } from './clickFunctions/';
 
 export const clickManipuations = (oldState, action) => {
   const previousValue = oldState.clickables[action.i][action.j];

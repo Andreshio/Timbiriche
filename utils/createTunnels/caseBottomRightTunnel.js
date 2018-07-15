@@ -17,7 +17,7 @@ export const caseBottomRightTunnel = (tunnels, circles, b) => {
 
         if(horizontalTunnelIndex === verticalTunnelIndex){
             const circleIndex = horizontalTunnelIndex;
-            circles.push(tunnels[circleIndex])
+            circles.push([...tunnels[circleIndex], b]);
         } else {
 
             const shouldFrontReverse = horizontalSequenceTest(frontArray[0], b);

@@ -9,9 +9,9 @@ import {
 
 
 const reduceToTunnels = (a, b) => {
-    if(a.tunnels[0].length === 0){
+    if(a.tunnels.length === 0){
         //console.log("first")
-        a.tunnels[0].push(b);
+        a.tunnels.push([b]);
     } else {
         let { tunnels, circles } = a;
     	if(b.tunnelType.vertLine === "left" && b.tunnelType.horzLine === "top"){
@@ -27,7 +27,7 @@ const reduceToTunnels = (a, b) => {
             ({tunnels, circles} = caseBottomRightTunnel(tunnels, circles, b) )
         }
         a.tunnels = tunnels;
-        a.circles = circles
+        a.circles = circles;
     }
     return a;
 }
@@ -37,7 +37,7 @@ export const createTunnels = (playableTiles, vertical, horizontal) => {
             .filter(({val})=>val===2)
             .map((col)=>setTunnelType(col, vertical, horizontal))
             .reduce(reduceToTunnels,{
-                tunnels: [[]], 
+                tunnels: [], 
                 circles: [],
             })
     return {tunnels, circles};

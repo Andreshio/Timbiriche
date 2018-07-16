@@ -26,27 +26,27 @@ export const runBot = (tiles, vertical, horizontal) => {
 
     let betterOptions = playableTiles;
 
-    if(level >= 1){
+    const possiblePoints = playableTiles.filter(({val}) => val===3);
+    /*if(level >= 1){
         const possiblePoints = playableTiles.filter(({val}) => val===3);
         if(possiblePoints.length>0){
             betterOptions = possiblePoints;
         }
-    }
+    }*/
     if(level >= 2){
         const {tunnels, circles} = createTunnels(playableTiles, vertical, horizontal);
-        //const map = const size = 4;
 
-        let tunnelsAndCirclesMap = [...Array(4)]
+        let pointsBoard = [...Array(vertical.length)]
             .map(()=>
-                [...Array(4)]
+                [...Array(vertical.length)]
                 .map(
                     ()=>0
                 )
         );
 
-        const possBoard = [...Array(4)]
+        const possBoard = [...Array(vertical.length)]
             .map((row, m)=>
-                [...Array(4)]
+                [...Array(vertical.length)]
                 .map((col, n)=>(
                     handleLines(m, n, vertical, horizontal)
                 )
@@ -54,20 +54,11 @@ export const runBot = (tiles, vertical, horizontal) => {
         );
 
         tunnels.map((tun) => tun.map( ({i, j})=> {
-            tunnelsAndCirclesMap[i][j] = 1;
-            //possBoard[i][j] = [];
+            pointsBoard[i][j] = 1;
         }));
         circles.map((tun) => tun.map( ({i, j})=> {
-            tunnelsAndCirclesMap[i][j] = 2;
-            //possBoard[i][j] = [];
+            pointsBoard[i][j] = 2;
         }));
-
-
-        // console.log("\n\nPossBoard\n");
-        // console.log(possBoard);
-        // console.log("\n");
-
-
 
         const firstAndLast = tunnels.reduce((a, b)=> {
             if(b.length>1){
@@ -85,17 +76,27 @@ export const runBot = (tiles, vertical, horizontal) => {
         }, []);
 
 
-        tunnelsAndCirclesMap = firstAndLast.reduce(
-            (maps, col) => (
-                determineAfterTunnel(col, maps)
-            ), {
-                pointsBoard: tunnelsAndCirclesMap, 
-                possBoard,
-            }
+        (
+            {pointsBoard, possBoard} = firstAndLast.reduce(
+                (maps, col) => (
+                    determineAfterTunnel(col, maps)
+                ), {pointsBoard, possBoard}
+            )
         );
 
-        //console.log(tunnelsAndCirclesMap);
-        
+        const options = possBoard.reduce( (a,b,m) => [
+                ...a, 
+                ...b.filter((el, n)=>el.length>0&&(pointsBoard[m][n]===0||pointsBoard[m][n]===3) )
+            ], 
+        []);
+
+        console.log("\n\npossiblePoints\n");
+        console.log(possiblePoints);
+        if(possiblePoints.length>0){
+            console.log("\n\npossiblesPoint[0] on pointsBoard\n");
+            console.log(pointsBoard[possiblePoints[0].i][possiblePoints[0].j])
+        }
+
     }
     const randomTile = 0;// Math.floor(Math.random()*betterOptions.length);
 

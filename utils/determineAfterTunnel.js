@@ -1,81 +1,95 @@
-const createVerticalAndHorizontal = (pointsBoard) => (
-    (arr)=> {
+const vertAndHorz = (arr, pointsBoard) => {
+    const [i, j] = arr;
 
-        const isValid = arr.reduce((a, b)=>(
-            b>=0 && b<=pointsBoard.length-1 && a
-        ),true)
-    
-        let previous = null;
+    const isValid = arr.reduce((a, b)=>(
+        b>=0 && b<=pointsBoard.length-1 && a
+    ),true)
 
-        if(isValid){
-            previous = pointsBoard[ arr[0] ][ arr[1] ];
-        }
+    let previous = null;
 
-        if(previous === 0){
-            pointsBoard[ arr[0] ][ arr[1] ] = 3;
-        }
-
-        return pointsBoard;
+    if(isValid){
+        previous = pointsBoard[i][j];
     }
-)
+
+    if(previous === 0){
+        pointsBoard[i][j] = 3;
+    }
+
+    return pointsBoard;
+}
+
+const filterPossibilities = (type, indexArr, [possI, possJ], pointsBoard, possBoard) => {
+    
+    const [mapI, mapJ] = indexArr;
+
+    const isValid = indexArr.reduce((a, b)=>(
+        b>=0 && b<=pointsBoard.length-1 && a
+    ), true);
+
+    if(isValid && pointsBoard[mapI][mapJ] === 3){
+        possBoard[mapI][mapJ] = possBoard[mapI][mapJ].filter(
+            p=>(
+                !(p.type===type&&p.i===possI&&p.j===possJ)
+            )
+        )
+    }
+    return possBoard;
+}
 
 export const determineAfterTunnel = (col, {pointsBoard, possBoard}) => {
 
     const { i, j } = col;
-    const vertAndHorz = createVerticalAndHorizontal(pointsBoard);
 
     if(col.tunnelType.type === "horizontal"){
         
-        const prev = [ [i], [j-1] ];
-        const next = [ [i], [j+1] ];
+        const prev = [ i, j-1 ];
+        const next = [ i, j+1 ];
 
-        pointsBoard = vertAndHorz(prev);
-        if(j > 0 &&pointsBoard[i][j-1] === 3){
-            possBoard[i][j-1] = possBoard[i][j-1].filter(p=>(
-                !(p.type==="vertical"&&p.i===i&&p.j===j)
-            ))
-        }
+        pointsBoard = vertAndHorz(prev, pointsBoard);
+        possBoard = filterPossibilities("vertical", prev, [ i, j ], pointsBoard, possBoard);
 
-        console.log(`i: ${i} j: ${j}`)
-        pointsBoard = vertAndHorz(next);
-        if(j<pointsBoard.length-1 && pointsBoard[i][j+1] === 3){
-            possBoard[i][j+1] = possBoard[i][j+1].filter(p=>(
-                !(p.type==="vertical"&&p.i===i&&p.j===j+1)
-            ))
-        }
-        console.log("\n\nnext\n")
-        console.log(possBoard[i][j+1]);
+        pointsBoard = vertAndHorz(next, pointsBoard);
+        possBoard = filterPossibilities("vertical", next, next, pointsBoard, possBoard);
     }
+
     if(col.tunnelType.type === "vertical"){
 
-        const prev = [ [i-1], [j] ];
-        const next = [ [i+1], [j] ];
+        const prev = [ i-1, j ];
+        const next = [ i+1, j ];
 
-        pointsBoard = vertAndHorz(prev);
-        pointsBoard = vertAndHorz(next);
+        pointsBoard = vertAndHorz(prev, pointsBoard);
+        possBoard = filterPossibilities("horizontal", prev, [ i, j ], pointsBoard, possBoard);
+
+        pointsBoard = vertAndHorz(next, pointsBoard);
+        possBoard = filterPossibilities("horizontal", next, next, pointsBoard, possBoard);
+
     }
     if(col.tunnelType.horzLine === "top"){
 
-        const prev = [ [i+1], [j] ]
-        pointsBoard = vertAndHorz(prev);
+        const next = [ i+1, j ]
+        pointsBoard = vertAndHorz(next, pointsBoard);
+        possBoard = filterPossibilities("horizontal", next, next, pointsBoard, possBoard);
 
     }
     if(col.tunnelType.horzLine === "bottom"){
 
-        const prev = [ [i-1], [j] ]
-        pointsBoard = vertAndHorz(prev);
+        const prev = [ i-1, j ]
+        pointsBoard = vertAndHorz(prev, pointsBoard);
+        possBoard = filterPossibilities("horizontal", prev, [i, j], pointsBoard, possBoard);
 
     }
     if(col.tunnelType.vertLine === "left"){
 
-        const next = [ [i], [j+1] ];
-        pointsBoard = vertAndHorz(next);
+        const next = [ i, j+1 ];
+        pointsBoard = vertAndHorz(next, pointsBoard);
+        possBoard = filterPossibilities("vertical", next, next, pointsBoard, possBoard);
 
     }
     if(col.tunnelType.vertLine === "right"){
 
-        const next = [ [i], [j-1] ];
-        pointsBoard = vertAndHorz(next);
+        const prev = [ i, j-1 ];
+        pointsBoard = vertAndHorz(prev, pointsBoard);
+        possBoard = filterPossibilities("vertical", prev, [i, j], pointsBoard, possBoard);
 
     }
 

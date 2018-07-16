@@ -1,4 +1,6 @@
 import { createTunnels } from './createTunnels/';
+import { determineAfterTunnel } from './determineAfterTunnel';
+
 
 export const handleLines = (i, j, vertical, horizontal) => {
     const lines = {vertical, horizontal};
@@ -34,19 +36,37 @@ export const runBot = (tiles, vertical, horizontal) => {
         const {tunnels, circles} = createTunnels(playableTiles, vertical, horizontal);
         //const map = const size = 4;
 
-        const tunnelsAndCirclesMap = [...Array(4)]
+        let tunnelsAndCirclesMap = [...Array(4)]
             .map(()=>
                 [...Array(4)]
                 .map(
                     ()=>0
                 )
         );
+
+        const possBoard = [...Array(4)]
+            .map((row, m)=>
+                [...Array(4)]
+                .map((col, n)=>(
+                    handleLines(m, n, vertical, horizontal)
+                )
+            )
+        );
+
         tunnels.map((tun) => tun.map( ({i, j})=> {
             tunnelsAndCirclesMap[i][j] = 1;
+            //possBoard[i][j] = [];
         }));
         circles.map((tun) => tun.map( ({i, j})=> {
             tunnelsAndCirclesMap[i][j] = 2;
+            //possBoard[i][j] = [];
         }));
+
+
+        // console.log("\n\nPossBoard\n");
+        // console.log(possBoard);
+        // console.log("\n");
+
 
 
         const firstAndLast = tunnels.reduce((a, b)=> {
@@ -65,66 +85,47 @@ export const runBot = (tiles, vertical, horizontal) => {
         }, []);
 
 
-        firstAndLast.map(col=>{
-            if(col.tunnelType.type === "horizontal"){
-                const { i, j } = col;
-                const previous = tunnelsAndCirclesMap[i][j-1];
-                const next = tunnelsAndCirclesMap[i][j+1];
+        tunnelsAndCirclesMap = firstAndLast.reduce(
+            (maps, col) => (
+                determineAfterTunnel(col, maps)
+            ), {
+                pointsBoard: tunnelsAndCirclesMap, 
+                possBoard,
+            }
+        );
 
-                if(previous === 0){
-                    tunnelsAndCirclesMap[i][j-1] = 3;
-                }
-                if(next === 0){
-                    tunnelsAndCirclesMap[i][j+1] = 3;
-                }
-
-            //console.log(`\nprevious: ${previous} \nnext: ${next} \ni:${i} j:${j}`);
-            }
-            if(col.tunnelType.type === "vertical"){
-                const { i, j } = col;
-
-                if(i > 0){
-                    const previous = tunnelsAndCirclesMap[i-1][j];
-                    if(previous === 0){
-                        tunnelsAndCirclesMap[i-1][j] = 3;
-                    }
-                }
-                if(i < tunnelsAndCirclesMap.length-1){
-                    const next = tunnelsAndCirclesMap[i+1][j];
-                    if(next === 0){
-                        tunnelsAndCirclesMap[i+1][j] = 3;
-                    }
-                }
-            }
-            console.log("\n")
-            console.log(col);
-            console.log("\n")
-            if(col.tunnelType.horzLine === "top"){
-                console.log("on top");
-                if(col.tunnelType.vertLine === "left"){
-                    console.log("on left");
-                }
-                if(col.tunnelType.vertLine === "right") {
-                    console.log("on rigth");
-                }
-            }
-            console.log("\n");
-            if(col.tunnelType.horzLine === "bottom"){
-                console.log("on bottom");
-                if(col.tunnelType.vertLine === "left"){
-                    console.log("on left");
-                }
-                if(col.tunnelType.vertLine === "right") {
-                    console.log("on rigth");
-                }
-            }
-             console.log("\n");
-        })
-        //console.log("\n\n---------\n\n");
-        //console.log("firstAndLast");
-        //console.log(firstAndLast);
-        console.log(tunnelsAndCirclesMap);
+        //console.log(tunnelsAndCirclesMap);
         
+    }
+    const randomTile = 0;// Math.floor(Math.random()*betterOptions.length);
+
+    const {i: botI, j: botJ} = betterOptions[randomTile]
+
+    const relevantLines = handleLines(botI, botJ, vertical, horizontal)
+
+    const randomLine = Math.floor(Math.random()*relevantLines.length);
+    const selectedLine = relevantLines[randomLine];
+
+    let botClicks =  [
+		{
+			i: selectedLine.i,
+			j: selectedLine.j,
+		},
+		{
+			i: selectedLine.i,
+			j: selectedLine.j,
+		}
+	];
+    if(selectedLine.type==="vertical"){
+    	botClicks[1].i++
+    } else {
+    	botClicks[1].j++
+    }
+
+	return botClicks;
+}
+
+
 
 /*
         const filteredBetterOptions = betterOptions.filter(
@@ -149,33 +150,3 @@ filteredBetterOptions: ${filteredBetterOptions.length}
             betterOptions = filteredBetterOptions;
         }
         */
-    }
-    const randomTile = 0;// Math.floor(Math.random()*betterOptions.length);
-
-    const {i: botI, j: botJ} = betterOptions[randomTile]
-
-    const relevantLines = handleLines(botI, botJ, vertical, horizontal)
-
-    const randomLine = Math.floor(Math.random()*relevantLines.length);
-    const selectedLine = relevantLines[randomLine];
-
-
-
-    let botClicks =  [
-		{
-			i: selectedLine.i,
-			j: selectedLine.j,
-		},
-		{
-			i: selectedLine.i,
-			j: selectedLine.j,
-		}
-	];
-    if(selectedLine.type==="vertical"){
-    	botClicks[1].i++
-    } else {
-    	botClicks[1].j++
-    }
-
-	return botClicks;
-}

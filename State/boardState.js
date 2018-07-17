@@ -1,6 +1,6 @@
 import { clickManipuations } from '../utils';
 
-const size = 4;
+const size = 5;
 const createArray = (row, col, value) => {
   return [...Array(row)].map(()=>
     [...Array(col)].map(()=>value)

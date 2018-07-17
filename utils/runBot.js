@@ -17,33 +17,44 @@ export const runBot = (tiles, vertical, horizontal) => {
 
     const level = 2;
 
-	const playableTiles = tiles 
+	const playableTilesMap = tiles 
 	    	.map( (row, k)=>
-	    		row.map( (col, m)=> ({val:col, i: k, j: m}) ) 
+	    		row.map( (col, m) => ({
+                    val:col,
+                    i: k,
+                    j: m,
+                    type: 0,
+                    lines: handleLines(k, m, vertical, horizontal)
+                }) )
 	    	)
-	    	.reduce( (a,b) => [...a, ...b], [])
-	    	.filter(({val})=>val<4);
+
+    const playableTiles = playableTilesMap
+            .reduce( (a,b) => [...a, ...b], [])
+            .filter(({val})=>val<4);
+
+
+    //console.log(playableTiles)
 
     let betterOptions = playableTiles;
 
     const possiblePoints = playableTiles.filter(({val}) => val===3);
-    /*if(level >= 1){
-        const possiblePoints = playableTiles.filter(({val}) => val===3);
-        if(possiblePoints.length>0){
-            betterOptions = possiblePoints;
-        }
-    }*/
-    if(level >= 2){
+
+    if(possiblePoints.length>0){
+        betterOptions = possiblePoints;
+    }
+
+    //console.log(betterOptions.length)
+    if(level >= 2 && possiblePoints.length === 0){
         const {tunnels, circles} = createTunnels(playableTiles, vertical, horizontal);
 
-        let pointsBoard = [...Array(vertical.length)]
+        /*let pointsBoard = [...Array(vertical.length)]
             .map(()=>
                 [...Array(vertical.length)]
                 .map(
                     ()=>0
                 )
-        );
-
+        );*/
+/*
         const possBoard = [...Array(vertical.length)]
             .map((row, m)=>
                 [...Array(vertical.length)]
@@ -52,13 +63,16 @@ export const runBot = (tiles, vertical, horizontal) => {
                 )
             )
         );
-
+*/
         tunnels.map((tun) => tun.map( ({i, j})=> {
-            pointsBoard[i][j] = 1;
+            playableTilesMap[i][j].type = 1;
         }));
         circles.map((tun) => tun.map( ({i, j})=> {
-            pointsBoard[i][j] = 2;
+            playableTilesMap[i][j].type = 2;
         }));
+
+        //console.log("playableTilesMap => c.type")
+        //console.log(playableTilesMap.map(r=>r.map(c=>c.type)))
 
         const firstAndLast = tunnels.reduce((a, b)=> {
             if(b.length>1){
@@ -74,38 +88,32 @@ export const runBot = (tiles, vertical, horizontal) => {
                 ]
             };
         }, []);
+        
+        filteredTyles = firstAndLast.reduce(
+            (maps, col) => (
+                determineAfterTunnel(col, maps)
+            ), playableTilesMap
+        )
+            .reduce( (a,b) => [...a, ...b], [])
+            .filter(({val, lines})=>val<4&&lines.length>0);
 
 
-        (
-            {pointsBoard, possBoard} = firstAndLast.reduce(
-                (maps, col) => (
-                    determineAfterTunnel(col, maps)
-                ), {pointsBoard, possBoard}
-            )
-        );
+        betterOptions = filteredTyles;
 
-        const options = possBoard.reduce( (a,b,m) => [
-                ...a, 
-                ...b.filter((el, n)=>el.length>0&&(pointsBoard[m][n]===0||pointsBoard[m][n]===3) )
-            ], 
-        []);
-
-        console.log("\n\npossiblePoints\n");
-        console.log(possiblePoints);
-        if(possiblePoints.length>0){
-            console.log("\n\npossiblesPoint[0] on pointsBoard\n");
-            console.log(pointsBoard[possiblePoints[0].i][possiblePoints[0].j])
+        const notGivingPoints = filteredTyles.filter( ({val})=>val!=2 );
+        
+        if(notGivingPoints.length > 0){
+            betterOptions = notGivingPoints;
         }
 
     }
-    const randomTile = 0;// Math.floor(Math.random()*betterOptions.length);
 
-    const {i: botI, j: botJ} = betterOptions[randomTile]
+    const randomTile = Math.floor(Math.random()*betterOptions.length);
 
-    const relevantLines = handleLines(botI, botJ, vertical, horizontal)
+    const {i: botI, j: botJ, lines} = betterOptions[randomTile]
 
-    const randomLine = Math.floor(Math.random()*relevantLines.length);
-    const selectedLine = relevantLines[randomLine];
+    const randomLine = Math.floor(Math.random()*lines.length);
+    const selectedLine = lines[randomLine];
 
     let botClicks =  [
 		{

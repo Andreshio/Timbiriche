@@ -4,11 +4,13 @@ import { View, TouchableOpacity } from 'react-native'; //TouchableWithoutFeedbac
 import { connect } from 'react-redux';
 import { click } from '../../State/actions';
 
+import AnimatedView from './AnimatedView';
+
 const colorTypes = ["#607D8B", "#ef5350", "#b71c1c", "#263238"]
 
 const mapStateToProps = (
     {board: {
-      clickables, horizontal, hitArea, players, currentPlayer
+      clickables, horizontal, hitArea, players, currentPlayer, lastPlayed
     }}, {i, j, isLast}
   ) => ({
   isBot: players[currentPlayer].isBot,
@@ -18,6 +20,9 @@ const mapStateToProps = (
   ],
   isTileSelected: horizontal[i][j],
   hitArea,
+  playerColor: lastPlayed.playerColor,
+  isLastPlayed: lastPlayed.type==="horizontal"&&lastPlayed.row===i&&lastPlayed.col===j,
+    
 })
 
 const mapDispatchToProps = (dispatch) => ({handleClick: (i, j)=>dispatch(click(i, j))})
@@ -27,10 +32,21 @@ const style = {flex: 1, zIndex: 1};
 //const hitSlopArea = 20;
 const createHitSlop = (hitArea) => ({top: hitArea,  right: hitArea, left: hitArea, bottom: hitArea});
 
+const getColor = (isLast, isClicked) => {
+  if(isLast){
+    return "#FFC400";
+  } else {
+    return isClicked?"#263238":"white"
+  }
+}
+
+
+
 export default connect(mapStateToProps, mapDispatchToProps)(
   ({
     i, j, isLast, clickValues, isBot,
-    isTileSelected, hitArea, handleClick
+    isTileSelected, hitArea, handleClick,
+    isLastPlayed, playerColor
   }) =>  (
     <Fragment>
       <TouchableOpacity
@@ -39,7 +55,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         style={{...style, backgroundColor: colorTypes[ clickValues[0] ] }}
         onPress={()=>handleClick(i, j)}
       />
-      <View style={{...style, flex: 5, backgroundColor: isTileSelected?"#263238":"white", zIndex: 0}} />
+      <AnimatedView 
+        isLast={isLastPlayed} 
+        isSelected={isTileSelected} 
+        playerColor={playerColor}
+        style={{zIndex: 0, flex: 5}}
+      />
       {isLast&&
         <TouchableOpacity
           hitSlop={createHitSlop(hitArea)}

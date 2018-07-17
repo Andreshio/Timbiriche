@@ -1,6 +1,6 @@
 import { createTunnels } from './createTunnels/';
 import { determineAfterTunnel } from './determineAfterTunnel';
-
+import { nivel2 } from './nivel2';
 
 export const handleLines = (i, j, vertical, horizontal) => {
     const lines = {vertical, horizontal};
@@ -15,10 +15,10 @@ export const handleLines = (i, j, vertical, horizontal) => {
 
 export const runBot = (tiles, vertical, horizontal) => {
 
-    const level = 2;
+    const nivel = 2;
 
 	const playableTilesMap = tiles 
-	    	.map( (row, k)=>
+	    	.map( (row, k) =>
 	    		row.map( (col, m) => ({
                     val:col,
                     i: k,
@@ -32,9 +32,6 @@ export const runBot = (tiles, vertical, horizontal) => {
             .reduce( (a,b) => [...a, ...b], [])
             .filter(({val})=>val<4);
 
-
-    //console.log(playableTiles)
-
     let betterOptions = playableTiles;
 
     const possiblePoints = playableTiles.filter(({val}) => val===3);
@@ -43,69 +40,8 @@ export const runBot = (tiles, vertical, horizontal) => {
         betterOptions = possiblePoints;
     }
 
-    //console.log(betterOptions.length)
-    if(level >= 2 && possiblePoints.length === 0){
-        const {tunnels, circles} = createTunnels(playableTiles, vertical, horizontal);
-
-        /*let pointsBoard = [...Array(vertical.length)]
-            .map(()=>
-                [...Array(vertical.length)]
-                .map(
-                    ()=>0
-                )
-        );*/
-/*
-        const possBoard = [...Array(vertical.length)]
-            .map((row, m)=>
-                [...Array(vertical.length)]
-                .map((col, n)=>(
-                    handleLines(m, n, vertical, horizontal)
-                )
-            )
-        );
-*/
-        tunnels.map((tun) => tun.map( ({i, j})=> {
-            playableTilesMap[i][j].type = 1;
-        }));
-        circles.map((tun) => tun.map( ({i, j})=> {
-            playableTilesMap[i][j].type = 2;
-        }));
-
-        //console.log("playableTilesMap => c.type")
-        //console.log(playableTilesMap.map(r=>r.map(c=>c.type)))
-
-        const firstAndLast = tunnels.reduce((a, b)=> {
-            if(b.length>1){
-                return [
-                    ...a,
-                    b[0],
-                    b[ b.length-1 ]
-                ]
-            } else {
-                return [
-                    ...a,
-                    b[0]
-                ]
-            };
-        }, []);
-        
-        filteredTyles = firstAndLast.reduce(
-            (maps, col) => (
-                determineAfterTunnel(col, maps)
-            ), playableTilesMap
-        )
-            .reduce( (a,b) => [...a, ...b], [])
-            .filter(({val, lines})=>val<4&&lines.length>0);
-
-
-        betterOptions = filteredTyles;
-
-        const notGivingPoints = filteredTyles.filter( ({val})=>val!=2 );
-        
-        if(notGivingPoints.length > 0){
-            betterOptions = notGivingPoints;
-        }
-
+    if(nivel >= 2 && possiblePoints.length === 0){
+        betterOptions = nivel2(playableTilesMap, playableTiles, vertical, horizontal) ;
     }
 
     const randomTile = Math.floor(Math.random()*betterOptions.length);
@@ -133,29 +69,3 @@ export const runBot = (tiles, vertical, horizontal) => {
 
 	return botClicks;
 }
-
-
-
-/*
-        const filteredBetterOptions = betterOptions.filter(
-            ({i, j}) => tunnelsAndCirclesMap[i][j] === 0
-        )
-
-
-        console.log("\n\tunnelsAndCirclesMap\n")
-        console.log(tunnelsAndCirclesMap);
-
-        console.log("\n\nLength:\n")
-        console.log(`
-betterOptions: ${betterOptions.length}
-tunnels:${tunnels.map(t=>` ${t.length}`)}
-circles:    ${circles.length}
-filteredBetterOptions: ${filteredBetterOptions.length}
-        \n\n`)
-
-        
-        //console.log(betterOptions.length);
-        if(filteredBetterOptions.length > 0){
-            betterOptions = filteredBetterOptions;
-        }
-        */

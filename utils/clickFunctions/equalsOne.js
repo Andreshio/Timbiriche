@@ -10,9 +10,6 @@ export const equalsOne = (oldState, action) => {
   const {tileInfo, clicked} = secondClick(oldState, action);
   const {type, row, col} = tileInfo;
   if(!newState[type][row][col]){
-    
-    //newState[type] = newState[type].slice();
-    //newState[type][row] = newState[type][row].slice();
     const returnThreeIfIsLast = createReturnThreeIfIsLast(clicked);
     const changedTiles = getChangedTiles(tileInfo, oldState.tiles.length)
 
@@ -29,25 +26,18 @@ export const equalsOne = (oldState, action) => {
     });
 
     newState[type][row][col] = true;//!oldState[type][row][col];
+    newState.lastPlayed = {type, row, col, playerColor: oldState.players[oldState.currentPlayer].color };
     newState.clickables = oldState.clickables.map(returnThreeIfIsLast);
     newState.clicked = [];
 
     newState.players = oldState.players.map((p)=>( {...p}) );
     newState.players[oldState.currentPlayer].points += points;
+    newState.playedTiles += points;
 
     if(points === 0){
       newState.currentPlayer = oldState.currentPlayer === oldState.players.length-1? 0: oldState.currentPlayer+1;
     }
     newState.turn = oldState.turn+1;
-
-
-
-    const playedTiles = newState.players.reduce((a, b) => a+b.points,0);
-    if(playedTiles === oldState.tiles.length**2){
-      newState.gameEnded = true;
-      newState.classification = getClassification(newState.players);
-    }
-    //console.log(playedTiles)
   }
   return newState;
 }

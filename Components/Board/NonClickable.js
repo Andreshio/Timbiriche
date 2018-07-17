@@ -1,25 +1,43 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, Component} from 'react';
 import { View } from 'react-native'; //TouchableWithoutFeedback.
-
 import { connect } from 'react-redux';
+
+import AnimatedView from './AnimatedView';
 
 const style = {flex: 1};
 
-const mapStateToProps = ({board: {vertical, colorTiles}}, {i, j, isLast}) => ({
+
+
+const mapStateToProps = ({board: {vertical, colorTiles, lastPlayed}}, {i, j, isLast}) => ({
   areClicked: [
     vertical[i][j],
     vertical[i][j+1]
   ],
+  playerColor: lastPlayed.playerColor,
   color: colorTiles[i][j],
+  areLastPlayed: [
+    lastPlayed.type==="vertical"&&lastPlayed.row===i&&lastPlayed.col===j,//&&lastPlayed.row===i&&lastPlayed===j,
+    lastPlayed.type==="vertical"&&lastPlayed.row===i&&lastPlayed.col===j+1,//&&lastPlayed.row===i&&lastPlayed===j+1,
+  ]
 })
 
 export default connect(mapStateToProps)(
-  ({areClicked, color, isLast}) =>(
+  ({areClicked, areLastPlayed, color, isLast, playerColor}) =>(
     <Fragment>
-      <View style={{...style, backgroundColor: areClicked[0]?"#263238":"white"}} />
+      <AnimatedView 
+        isLast={areLastPlayed[0]} 
+        isSelected={areClicked[0]} 
+        playerColor={playerColor}
+        style={{flex: 1}}
+      />
       <View style={{...style, flex: 5, backgroundColor: color}} />
       {isLast&&
-        <View style={{...style, backgroundColor: areClicked[1]?"#263238":"white"}} />
+        <AnimatedView 
+          isLast={areLastPlayed[1]} 
+          isSelected={areClicked[1]} 
+          playerColor={playerColor}
+          style={{flex: 1}}
+        />
       }
     </Fragment>
   )

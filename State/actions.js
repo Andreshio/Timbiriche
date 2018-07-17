@@ -1,7 +1,5 @@
 import { runBot } from '../utils/runBot';
 
-//export const click0 = (i, j) => ({type: 'CLICK', i, j });
-
 const asyncDispatch = (toDispatch, delay) => {
 	return new Promise((resolve) => {
 		setTimeout(()=>{
@@ -13,23 +11,33 @@ const asyncDispatch = (toDispatch, delay) => {
 
 export const click = (i, j) => {
 	return async (dispatch, getState) => {
-	    // 0let {board: {players, currentPlayer}} = getState();
-
-	    // console.log(players[currentPlayer].isBot)
-
 	    dispatch({type: 'CLICK', i, j });
 	    
-	    let {board: {tiles, players, currentPlayer, vertical, horizontal}} = getState();
+	    let {board: {tiles, players, currentPlayer, vertical, horizontal, playedTiles}} = getState();
 
-	    while(players[currentPlayer].isBot){
-	    	const botClicks = runBot(tiles, vertical, horizontal);
-	    	//console.log(botClicks);
+	    //let playedTiles = players.reduce((a, b) => a+b.points,0);
 
-	    	await asyncDispatch(()=>dispatch({type: 'CLICK', ...botClicks[0]}), 0);
-	    	await asyncDispatch(()=>dispatch({type: 'CLICK', ...botClicks[1]}), 0)
-	 
-	    	await ({board: {tiles, players, currentPlayer, vertical, horizontal}} = getState());
-	    	
-	    }
+	    if(playedTiles === tiles.length**2){
+	    	dispatch({type: 'END_GAME', players})
+		} else {
+		    while(players[currentPlayer].isBot && playedTiles !== tiles.length**2){
+		    	const botClicks = runBot(tiles, vertical, horizontal);
+
+		    	await asyncDispatch(()=>dispatch({type: 'CLICK', ...botClicks[0]}), 500);
+		    	await asyncDispatch(()=>dispatch({type: 'CLICK', ...botClicks[1]}), 500)
+		 
+		    	await ({board: {tiles, players, currentPlayer, vertical, horizontal, playedTiles}} = getState());
+		    	
+		    	//playedTiles = players.reduce((a, b) => a+b.points,0)
+		    }
+			
+		    //playedTiles = players.reduce((a, b) => a+b.points,0);
+
+		    if(playedTiles === tiles.length**2){
+		    	dispatch({type: 'END_GAME', players})
+		    }
+		    
+		} 
+
 	}
 }

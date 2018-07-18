@@ -56,6 +56,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         onPress={()=>handleClick(i, j)}
       />
       <AnimatedView 
+        key={`an${i}+an${j}`}
         isLast={isLastPlayed} 
         isSelected={isTileSelected} 
         playerColor={playerColor}

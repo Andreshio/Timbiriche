@@ -4,8 +4,9 @@ import { Animated, View, Easing } from 'react-native';
 export default class extends Component {
   constructor () {
     super()
+
     this.colorValue = new Animated.Value(0);
-    this.animationSpeed = 1000;
+    //this.animationSpeed = this.props.isLast?750:250;
   }
  
   componentDidUpdate(){
@@ -13,41 +14,43 @@ export default class extends Component {
       this.spinUp()
     }
   }
+  shouldComponentUpdate(nextProps, nextState){
+    return nextProps.isLast !== this.props.isLast || nextProps.isSelected !== this.props.isSelected
+  }
+
   spinUp = () => {
-    //console.log("on spin");
-    //this.colorValue.setValue(0)
-    Animated.timing(
-      this.colorValue,
-      {
-        toValue: 1,
-        duration: this.animationSpeed,
-        easing: Easing.ease,
-        //easing: Easing.linear
-      }
-    ).start(() => this.spinDown())
+    if(this.props.isLast){
+      Animated.timing(
+        this.colorValue,
+        {
+          toValue: 1,
+          duration: this.props.isLast?750:250,
+          easing: Easing.ease,
+        }
+      ).start(this.spinDown)
+    }
   }
   spinDown = () => {
-    //this.colorValue.setValue(1)
     Animated.timing(
       this.colorValue,
       {
         toValue: 0,
-        duration: this.animationSpeed,
+        duration: this.props.isLast?750:250,
         easing: Easing.ease,
-        //easing: Easing.linear
       }
-    ).start(() => this.props.isLast && this.spinUp())
+    ).start(this.spinUp);
   }
   render () {
     const color = this.colorValue.interpolate({
       inputRange: [0, 1],
-      outputRange: ["#263238", this.props.playerColor]
+      outputRange: [1, 0.70]
     })
     return (
       <Animated.View
         style={{
           ...this.props.style,
-          backgroundColor: this.props.isLast? color : this.props.isSelected? "#263238" : "white",
+          backgroundColor: this.props.isSelected? "#263238" : "white",
+          opacity: color,
           //transform: [{rotate: spin}] }}
         }}
       />

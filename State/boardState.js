@@ -1,7 +1,7 @@
 import { clickManipuations } from '../utils';
 import { getClassification } from '../utils/clickFunctions/getClassification';
 
-const size = 3;
+const size = 7;
 const createArray = (row, col, value) => {
   return [...Array(row)].map(()=>
     [...Array(col)].map(()=>value)
@@ -48,8 +48,12 @@ export default (state = initialState(), action) => {
         return {
           ...state,
           gameEnded: true,
+          lastPlayed: {type: null, col: null, row: null, playerColor: "white"},
           classification: getClassification(action.players)
         }
+      case 'RESET':
+        console.log("\nOn Reset\n");
+        return initialState()
     default:
       return state
   }

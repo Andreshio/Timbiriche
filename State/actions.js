@@ -35,6 +35,7 @@ export const click = (i, j) => {
 
 		    if(playedTiles === tiles.length**2){
 		    	dispatch({type: 'END_GAME', players})
+		    	await asyncDispatch(()=>dispatch({type: 'RESET'}), 1000);
 		    }
 		    
 		} 

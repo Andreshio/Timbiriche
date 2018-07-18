@@ -15,6 +15,7 @@ const mapStateToProps = ({board: {vertical, colorTiles, lastPlayed}}, {i, j, isL
   ],
   playerColor: lastPlayed.playerColor,
   color: colorTiles[i][j],
+  //showLast: lastPlayed.show,
   areLastPlayed: [
     lastPlayed.type==="vertical"&&lastPlayed.row===i&&lastPlayed.col===j,//&&lastPlayed.row===i&&lastPlayed===j,
     lastPlayed.type==="vertical"&&lastPlayed.row===i&&lastPlayed.col===j+1,//&&lastPlayed.row===i&&lastPlayed===j+1,
@@ -29,12 +30,14 @@ export default connect(mapStateToProps)(
         isSelected={areClicked[0]} 
         playerColor={playerColor}
         style={{flex: 1}}
+        //showLast={showLast}
       />
       <View style={{...style, flex: 5, backgroundColor: color}} />
       {isLast&&
         <AnimatedView 
           isLast={areLastPlayed[1]} 
-          isSelected={areClicked[1]} 
+          isSelected={areClicked[1]}
+          //showLast={showLast}
           playerColor={playerColor}
           style={{flex: 1}}
         />

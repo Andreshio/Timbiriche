@@ -11,6 +11,7 @@ const equalsZero = (oldState, action) => {
     j:        action.j,
     isLast:   newState.clickables.reduce(addIfOne, 0) === 1,
   }];
+  //newState.lastPlayed.show = false;
   return newState;
 }
 
@@ -20,6 +21,7 @@ const equalsTwo = (oldState, action) => {
     (row)=> row.map((col)=>col===3?3:0)    
   );
   newState.clicked = [];
+  //newState.lastPlayed.show = true;
   return newState;
 }
 

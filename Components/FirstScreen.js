@@ -1,9 +1,7 @@
 import React, {Component, Fragment} from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 
-import { Button } from 'react-native-material-ui';
-
-import mouse from '../mouseWhite.png'
+import mouse from '../blackWhite.png'
 
 export default () => {
 	return (
@@ -13,31 +11,92 @@ export default () => {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-            <Image 
-            	source={mouse} 
-                style={{width: 150, height: 150, marginBottom: 50}}
-            />
+            
             <Text style={{
-                fontSize: 80, 
+                fontSize: 90, 
+                fontWeight: "900",
                 color: "white",
                 fontFamily: "monospace",   
-                marginBottom: 50,
+                marginBottom: 40,
+                textShadowColor: '#212121',
+  				textShadowOffset: {width: 10, height: 10},
+ 				textShadowRadius: 10
+
             }}>
                 Timbiriche
             </Text>
+            <View style={{elevation: 10, height: 250, width: 210}}>
+	            <Image
+	            	source={mouse} 
+	                style={{
+	                	width: 210, 
+	                	height: 250, 
+	                	borderWidth: 1,
+	                }}
+	            />
+	           </View>
 
-           	{ /* <Button text="Primary" /> */}
-
-            <TouchableOpacity
+            <TouchableWithoutFeedback
 			  onPress={()=>console.log("clicked")}
-			  style={{height: 100, width: 300, backgroundColor: "#841584"}}
-			  title="Learn More"
-			  accessibilityLabel="Learn more about this purple button"
-			/>
-
+			  style={{
+			  	shadowOffset:{  width: 50,  height: 10,  },
+				shadowColor: 'black',
+			  }}
+			>	
+				<View  
+					style={{
+						backgroundColor: "#212121", 
+						height: 100, 
+						width: 300, 
+						borderWidth: 2, 
+						borderColor: "white",
+						borderRadius: 30, 
+						marginTop: 40,
+						justifyContent: 'center',
+            			alignItems: 'center',
+            			elevation: 10
+					}}
+				>
+					<Text 
+						style={{
+							fontSize: 40,
+  							color: "white",
+						}}
+					> 
+						Jogar 
+					</Text>
+				</View>
+			</TouchableWithoutFeedback>
+	
       
-            <View style={{backgroundColor: "black", height: 100, width: 300, marginTop: 30}} />
-        	<View style={{backgroundColor: "black", height: 100, width: 300, marginTop: 30}} />
+        	<TouchableWithoutFeedback
+			  onPress={()=>console.log("clicked")}
+			>
+				<View  
+					style={{
+						backgroundColor: "#212121", 
+						height: 100, 
+						width: 300, 
+						borderWidth: 2, 
+						borderColor: "white",
+						borderRadius: 30, 
+						marginTop: 40,
+						justifyContent: 'center',
+            			alignItems: 'center',
+            			elevation: 10
+					}}
+				>
+					<Text 
+						style={{
+							fontSize: 40,
+  							color: "white",
+						}}
+					> 
+						Sobre 
+					</Text>
+				</View>
+			</TouchableWithoutFeedback>
+		
 
         </View>
     )

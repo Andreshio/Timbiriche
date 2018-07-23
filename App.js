@@ -4,8 +4,6 @@ import { StyleSheet, View, Text, Image } from 'react-native';
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux';
 
-import {ThemeContext} from 'react-native-material-ui';
-
 import thunk from 'redux-thunk';
 
 import rootReducer from './State';
@@ -31,20 +29,20 @@ const GameScreen = () => (
 
 export default class App extends Component {
   render(){
+    const isFirstScreen = true;
     return(
-      <ThemeContext.Provider>
-        <Provider store={store}>
+      <Provider store={store}>
           <View style={{flex: 1,}}>
-            {true&&
+            {isFirstScreen&&
               <FirstScreen />
             }
 
-            {false&&
+            {!isFirstScreen&&
               <GameScreen />
             }
           </View> 
-        </Provider>
-      </ThemeContext.Provider>
+      </Provider>
+      
     )
   }
 }

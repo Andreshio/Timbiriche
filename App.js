@@ -8,38 +8,58 @@ import thunk from 'redux-thunk';
 
 import rootReducer from './State';
 
-import GameInfo from './Components/GameInfo';
-import Board from './Components/Board/';
-import FirstScreen from './Components/FirstScreen';
+import GameScreen from './Components/GameScreen';
+import FirstScreen from './Components/FirstScreen/';
 
 const store = createStore(
   rootReducer,
   applyMiddleware(thunk)
 );
 
-const GameScreen = () => (
-  <View style={{flex: 1}}>
-    <View style={{flex: 2, backgroundColor: "#263238", borderBottomWidth: 10, borderColor: "#d50000"}}>
-      <GameInfo />
-    </View>
-    <Board />
-    <View style={{flex: 1, backgroundColor: "#263238", borderTopWidth: 10, borderColor: "#d50000"}}/>
-  </View>
+import {
+  createStackNavigator,
+} from 'react-navigation';
+
+class ConfigGame extends Component {
+  render(){
+    return (
+      <View>
+        <Text> ConfigGame </Text> 
+      </View>
+    )
+  };
+}
+
+const Navigation = createStackNavigator({
+    Home: { screen: FirstScreen },
+    ConfigGame: { screen: ConfigGame },
+    Game: { screen: GameScreen },
+  }, 
+  {
+    initialRouteName: "Home",
+    navigationOptions: {
+      //header: null,
+      headerStyle: {        
+        backgroundColor: "#263238"      
+      },
+      headerTitleStyle: {
+        fontWeight: "bold",
+        color: "red",
+      },
+      headerTintColor: "#d50000",
+    }
+  }
+
 );
+
 
 export default class App extends Component {
   render(){
     const isFirstScreen = true;
     return(
       <Provider store={store}>
-          <View style={{flex: 1,}}>
-            {isFirstScreen&&
-              <FirstScreen />
-            }
-
-            {!isFirstScreen&&
-              <GameScreen />
-            }
+          <View style={{flex: 1}}>
+            <Navigation />
           </View> 
       </Provider>
       

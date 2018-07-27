@@ -39,6 +39,11 @@ const initialState = () => ({
 
 export default (state = initialState(), action) => {
   switch (action.type) {
+      case 'TOGGLE_CURRENT_PLAYER':
+        return {
+          ...state,
+          currentPlayer: action.index,
+        }
       case 'CLICK':
         return {
           ...state,

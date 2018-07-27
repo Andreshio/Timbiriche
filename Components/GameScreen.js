@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
 import { View } from 'react-native';
 
+import { connect } from 'react-redux';
+
+import { botDispatch } from '../State/actions';
+
 import GameInfo from './GameInfo';
 import Board from './Board/';
 
@@ -13,12 +17,15 @@ const MyIcon = (
  	</TouchableWithoutFeedback>
 );
 
-export default class extends Component {
+class GameScreen extends Component {
   static navigationOptions = {
-    //header: null,
-    //headerLeft: null,
     headerRight: MyIcon
   };
+  componentDidMount(){
+    if(this.props.isCurrentBot){
+      this.props.botDispatch();
+    }
+  }
   render(){
     return (
       <View style={{flex: 1}}>
@@ -31,3 +38,8 @@ export default class extends Component {
     );
   }
 }
+
+const mapStateToProps = ({board: {currentPlayer, players}}) => ({isCurrentBot: players[currentPlayer].isBot})
+const mapDispatchToProps = (dispatch) => ({ botDispatch: ()=>dispatch(botDispatch()) });
+
+export default connect(mapStateToProps, mapDispatchToProps)(GameScreen);

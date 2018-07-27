@@ -9,9 +9,36 @@ const asyncDispatch = (toDispatch, delay) => {
 	})
 }
 
+export const toggleCurrentPlayer = (index) => ({
+	type: 'TOGGLE_CURRENT_PLAYER', index
+})
+
 export const changeColor = (color, i) => {
 	//console.log(`${i} - ${color}`)
 	return ({type: 'CHANGE_COLOR', i, color})
+}
+
+export const botDispatch = () => {
+	return async (dispatch, getState) => {
+		let {board: {tiles, players, currentPlayer, vertical, horizontal, playedTiles}} = getState();
+
+		while(players[currentPlayer].isBot && playedTiles !== tiles.length**2){
+	    	const botClicks = runBot(tiles, vertical, horizontal);
+
+	    	await asyncDispatch(()=>dispatch({type: 'CLICK', ...botClicks[0]}), 500);
+	    	await asyncDispatch(()=>dispatch({type: 'CLICK', ...botClicks[1]}), 500)
+	 
+	    	await ({board: {tiles, players, currentPlayer, vertical, horizontal, playedTiles}} = getState());
+	    	
+	    }
+		
+	    if(playedTiles === tiles.length**2){
+	    	dispatch({type: 'END_GAME', players})
+	    	await asyncDispatch(()=>dispatch({type: 'RESET'}), 1000);
+	    }
+
+
+	}
 }
 
 export const click = (i, j) => {
@@ -25,24 +52,7 @@ export const click = (i, j) => {
 	    if(playedTiles === tiles.length**2){
 	    	dispatch({type: 'END_GAME', players})
 		} else {
-		    while(players[currentPlayer].isBot && playedTiles !== tiles.length**2){
-		    	const botClicks = runBot(tiles, vertical, horizontal);
-
-		    	await asyncDispatch(()=>dispatch({type: 'CLICK', ...botClicks[0]}), 500);
-		    	await asyncDispatch(()=>dispatch({type: 'CLICK', ...botClicks[1]}), 500)
-		 
-		    	await ({board: {tiles, players, currentPlayer, vertical, horizontal, playedTiles}} = getState());
-		    	
-		    	//playedTiles = players.reduce((a, b) => a+b.points,0)
-		    }
-			
-		    //playedTiles = players.reduce((a, b) => a+b.points,0);
-
-		    if(playedTiles === tiles.length**2){
-		    	dispatch({type: 'END_GAME', players})
-		    	await asyncDispatch(()=>dispatch({type: 'RESET'}), 1000);
-		    }
-		    
+		    dispatch(botDispatch());
 		} 
 
 	}

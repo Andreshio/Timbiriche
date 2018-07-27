@@ -27,7 +27,7 @@ export default class extends Component {
 	            />
 	            <Button 
 	            	text={"Jogar"}
-	            	onPress={()=>navigate('ConfigGame')}
+	            	onPress={()=>navigate('SelectGameType')}
 	            />
 				<Button 
 	            	text={"Sobre"}

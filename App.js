@@ -10,6 +10,7 @@ import rootReducer from './State';
 
 import GameScreen from './Components/GameScreen';
 import FirstScreen from './Components/FirstScreen/';
+import SelectGameType from './Components/SelectGameType';
 import ConfigGame from './Components/ConfigGameScreen';
 
 const store = createStore(
@@ -23,6 +24,7 @@ import {
 
 const Navigation = createStackNavigator({
     Home: { screen: FirstScreen },
+    SelectGameType: { screen: SelectGameType },
     ConfigGame: { screen: ConfigGame },
     Game: { screen: GameScreen },
   }, 

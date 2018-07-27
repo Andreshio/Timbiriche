@@ -10,6 +10,7 @@ import rootReducer from './State';
 
 import GameScreen from './Components/GameScreen';
 import FirstScreen from './Components/FirstScreen/';
+import ConfigGame from './Components/ConfigGameScreen';
 
 const store = createStore(
   rootReducer,
@@ -20,16 +21,6 @@ import {
   createStackNavigator,
 } from 'react-navigation';
 
-class ConfigGame extends Component {
-  render(){
-    return (
-      <View>
-        <Text> ConfigGame </Text> 
-      </View>
-    )
-  };
-}
-
 const Navigation = createStackNavigator({
     Home: { screen: FirstScreen },
     ConfigGame: { screen: ConfigGame },
@@ -38,7 +29,6 @@ const Navigation = createStackNavigator({
   {
     initialRouteName: "Home",
     navigationOptions: {
-      //header: null,
       headerStyle: {        
         backgroundColor: "#263238"      
       },
@@ -55,7 +45,6 @@ const Navigation = createStackNavigator({
 
 export default class App extends Component {
   render(){
-    const isFirstScreen = true;
     return(
       <Provider store={store}>
           <View style={{flex: 1}}>

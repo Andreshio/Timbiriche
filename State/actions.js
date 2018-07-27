@@ -9,6 +9,11 @@ const asyncDispatch = (toDispatch, delay) => {
 	})
 }
 
+export const changeColor = (color, i) => {
+	//console.log(`${i} - ${color}`)
+	return ({type: 'CHANGE_COLOR', i, color})
+}
+
 export const click = (i, j) => {
 	return async (dispatch, getState) => {
 	    dispatch({type: 'CLICK', i, j });

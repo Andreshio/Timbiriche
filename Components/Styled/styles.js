@@ -19,8 +19,7 @@ const imageStyle = {
 	width: "100%", 
 	height: "100%", 
 	height: 250, 
-	width: 210, 
-	//margin: 40,
+	width: 210,
 }
 
-export { backgroundStyle, titleStyle, imageStyle };
+export {backgroundStyle, titleStyle, imageStyle, buttonViewStyle};

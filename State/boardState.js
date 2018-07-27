@@ -1,7 +1,7 @@
 import { clickManipuations } from '../utils';
 import { getClassification } from '../utils/clickFunctions/getClassification';
 
-const size = 7;
+const size = 4;
 const createArray = (row, col, value) => {
   return [...Array(row)].map(()=>
     [...Array(col)].map(()=>value)
@@ -43,6 +43,16 @@ export default (state = initialState(), action) => {
         return {
           ...state,
           ...clickManipuations(state, action),
+        }
+      case 'CHANGE_COLOR':
+        return {
+          ...state, 
+          players: state.players.map((player, i)=>{
+            if(i === action.i){
+              player.color = action.color;
+            }
+            return player;
+          })
         }
       case 'END_GAME':
         return {

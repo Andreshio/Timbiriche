@@ -1,18 +1,10 @@
 import React, {Component} from 'react';
 import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
-import {backgroundStyle, titleStyle, imageStyle, buttonViewStyle} from './styles';
+import {backgroundStyle, titleStyle, imageStyle} from './styles';
 
 import mouse from '../../blackWhite.png'
 
-const Button = ({text, onPress}) => (
-	<TouchableWithoutFeedback onPress={onPress}>	
-		<View style={buttonViewStyle}>
-			<Text style={{fontSize: 40,color: "white"}}> 
-				{text} 
-			</Text>
-		</View>
-	</TouchableWithoutFeedback>
-)
+import { Button, Wraper } from '../Styled'
 
 const JustSpace = () => (<View/>);
 const Title = ({text}) => (<Text style={titleStyle}>{text}</Text>);
@@ -26,7 +18,7 @@ export default class extends Component {
   		const { navigate } = this.props.navigation;
 
 		return (
-			<View style={backgroundStyle}>
+			<Wraper>
 				<JustSpace />
 	            <Title text={"Timbiriche"} />
 	            <Image
@@ -35,7 +27,7 @@ export default class extends Component {
 	            />
 	            <Button 
 	            	text={"Jogar"}
-	            	onPress={()=>navigate('Game')}
+	            	onPress={()=>navigate('ConfigGame')}
 	            />
 				<Button 
 	            	text={"Sobre"}
@@ -46,7 +38,7 @@ export default class extends Component {
 	            	onPress={()=>console.log("clicked")}
 	            />
 	            <JustSpace />
-	        </View>
+	        </Wraper>
 	    )
 	}
 }

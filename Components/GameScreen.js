@@ -9,14 +9,14 @@ import { FontAwesome } from '@expo/vector-icons';
 
 const MyIcon = (
 	<TouchableWithoutFeedback onPress={()=>console.log("CONFIG")}>
- 		<FontAwesome name="gear" size={30} color="#d50000" style={{marginRight: 20}}/>
+ 		<FontAwesome name="gear" size={30} color="white" style={{marginRight: 20}}/>
  	</TouchableWithoutFeedback>
 );
 
 export default class extends Component {
   static navigationOptions = {
     //header: null,
-    //headerLeft: MyIcon,
+    //headerLeft: null,
     headerRight: MyIcon
   };
   render(){

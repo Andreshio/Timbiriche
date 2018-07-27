@@ -23,7 +23,7 @@ const initialState = () => ({
     {
       color: "#ff1744",
       points: 0,
-      isBot: true,
+      isBot: false,
     },
   ],
 
@@ -39,6 +39,16 @@ const initialState = () => ({
 
 export default (state = initialState(), action) => {
   switch (action.type) {
+      case 'TOGGLE_IS_BOT':
+        return {
+          ...state,
+          players: state.players.map((player, i)=>{
+            if(i===action.index){
+              player.isBot = action.instance;
+            }
+            return player;
+          })
+        }
       case 'TOGGLE_CURRENT_PLAYER':
         return {
           ...state,

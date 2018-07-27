@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { TouchableWithoutFeedback } from 'react-native';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
 import { connect } from 'react-redux';
 
@@ -17,9 +17,14 @@ const MyIcon = (
  	</TouchableWithoutFeedback>
 );
 
+const StopButton = () => (
+  <Text style={{color: "white", fontSize: 20, marginLeft: 20}}> Sair </Text> 
+)
+
 class GameScreen extends Component {
   static navigationOptions = {
-    headerRight: MyIcon
+    //headerRight: MyIcon
+    headerLeft: StopButton,
   };
   componentDidMount(){
     if(this.props.isCurrentBot){

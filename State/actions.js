@@ -9,6 +9,10 @@ const asyncDispatch = (toDispatch, delay) => {
 	})
 }
 
+export const toggleIsBot = (instance, index) => ({
+	type: "TOGGLE_IS_BOT", instance, index
+})
+
 export const toggleCurrentPlayer = (index) => ({
 	type: 'TOGGLE_CURRENT_PLAYER', index
 })

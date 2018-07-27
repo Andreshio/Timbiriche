@@ -33,10 +33,6 @@ export default class extends Component {
 	            	text={"Sobre"}
 	            	onPress={()=>console.log("clicked")}
 	            />
-	            <Button 
-	            	text={"Sobre"}
-	            	onPress={()=>console.log("clicked")}
-	            />
 	            <JustSpace />
 	        </Wraper>
 	    )

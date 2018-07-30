@@ -6,7 +6,7 @@ import { Wraper, Button } from './Styled/';
 import PlayerConfig from './PlayerConfig';
 import Picker from './Picker';
 
-import { changeColor, toggleCurrentPlayer } from '../State/actions';
+import { startGame, changeColor, toggleCurrentPlayer } from '../State/actions';
 
 const colors = ["#00E676", "#ff1744", "#1A237E", "#6200EA", '#00B8D4', '#FFEA00'];
 
@@ -21,7 +21,7 @@ class ConfigGameScreen extends Component {
 
   	};
   	render(){
-  		const { navigation: {navigate}, players, changeColor, currentPlayer, toggleCurrentPlayer } = this.props;
+  		const { navigation: {navigate}, players, changeColor, currentPlayer, toggleCurrentPlayer, startGame } = this.props;
 
   		const alreadySelected = colors.find(c=>{
   			if(this.state.toConfigPlayer===0){
@@ -94,11 +94,13 @@ class ConfigGameScreen extends Component {
 
 		            		if(players[1].isBot){
 			            		changeColor(botColors[randomNumber], 1);
-			            		navigate('Game')
+			            		startGame()
+			            		navigate('Game');
 			            	} else {
 			            		if(this.state.toConfigPlayer === 0){
 			            			this.setState({toConfigPlayer: 1});
 			            		} else {
+			            			startGame()
 			            			navigate('Game')
 			            		}
 			            		
@@ -112,6 +114,7 @@ class ConfigGameScreen extends Component {
 	}
 }
 const mapDispatchToProps = (dispatch) => ({
+	startGame: () => dispatch(startGame()),
 	changeColor: (i, color) => dispatch(changeColor(i, color)),
 	toggleCurrentPlayer: (i) => dispatch(toggleCurrentPlayer(i)),
 })

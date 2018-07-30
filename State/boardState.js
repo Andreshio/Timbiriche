@@ -12,6 +12,7 @@ const initialState = () => ({
   turn: 0,
   playedTiles: 0,
   gameEnded: false,
+  gameRunning: false,
   classification: [],
   currentPlayer: 0,
   players: [
@@ -21,7 +22,7 @@ const initialState = () => ({
       isBot: false,
     }, 
     {
-      color: "#ff1744",
+      color: null,
       points: 0,
       isBot: false,
     },
@@ -69,16 +70,21 @@ export default (state = initialState(), action) => {
             return player;
           })
         }
+      case 'START_GAME':
+        return {
+          ...state,
+          gameRunning: true,
+        }
       case 'END_GAME':
         return {
           ...state,
           gameEnded: true,
+          gameRunning: false,
           lastPlayed: {type: null, col: null, row: null, playerColor: "white"},
-          classification: getClassification(action.players)
+          classification: getClassification(action.players),
         }
       case 'RESET':
-        console.log("\nOn Reset\n");
-        return initialState()
+        return initialState();
     default:
       return state
   }

@@ -9,6 +9,10 @@ const asyncDispatch = (toDispatch, delay) => {
 	})
 }
 
+export const resetGame = () => ({type: 'RESET'});
+
+export const startGame = () => ({type: 'START_GAME'})
+
 export const toggleIsBot = (instance, index) => ({
 	type: "TOGGLE_IS_BOT", instance, index
 })
@@ -18,7 +22,6 @@ export const toggleCurrentPlayer = (index) => ({
 })
 
 export const changeColor = (color, i) => {
-	//console.log(`${i} - ${color}`)
 	return ({type: 'CHANGE_COLOR', i, color})
 }
 
@@ -38,7 +41,7 @@ export const botDispatch = () => {
 		
 	    if(playedTiles === tiles.length**2){
 	    	dispatch({type: 'END_GAME', players})
-	    	await asyncDispatch(()=>dispatch({type: 'RESET'}), 1000);
+	    	//await asyncDispatch(()=>dispatch({type: 'RESET'}), 1000);
 	    }
 
 
